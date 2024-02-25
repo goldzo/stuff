@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gold - contact</title>
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Send Message, no funny business.</h1>
+      <form id="messageForm">
+        <label for="username">Discord Username for Response:</label><br />
+        <input type="text" id="username" name="username" required /><br /><br />
+        <label for="message">Message:</label><br />
+        <textarea
+          id="message"
+          name="message"
+          rows="4"
+          cols="50"
+          required
+        ></textarea
+        ><br /><br />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+
+    <script>
+      document
+        .getElementById("messageForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent default form submission
+
+          // Get form data
+          var username = document.getElementById("username").value;
+          var message = document.getElementById("message").value;
+
+          // Construct payload with embed
+          var payload = {
+            embeds: [
+              {
+                description: message,
+                author: {
+                  name: username,
+                },
+              },
+            ],
+          };
+
+          // Send payload to webhook URL
+          var webhookUrl =
+            "https://discord.com/api/webhooks/1211164207152898088/X1s9de37rW7s3i99-r_HN052pxa3VA80Z-zJZdw-m04Dlev10wFqLLJiP2LM-bsT-yKR"; // Replace with your actual webhook URL
+          fetch(webhookUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(
+                  "Failed to send message. Status: " + response.status
+                );
+              }
+              alert("Message sent successfully!");
+              document.getElementById("messageForm").reset(); // Reset form after successful submission
+            })
+            .catch((error) => {
+              alert("Error: " + error.message);
+            });
+        });
+    </script>
+  </body>
+</html>
